@@ -11,7 +11,6 @@ const Link = require('./models/link');
 const User = require('./models/user');
 
 const checkAuth = require('./middleware/check-auth');
-const getUser = require('./middleware/get-user');
 
 const app = express();
 
