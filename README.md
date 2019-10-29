@@ -34,7 +34,7 @@ Node.js с поддержкой async/await (> 7.6)
 
 ### Схема БД
 Хранение ссылки:
-```json
+```
 {
   link: {type: String, required: true}, // исходная ссылка
   shortLink: {type: String, required: true}, // короткая ссылка
@@ -71,7 +71,7 @@ Node.js с поддержкой async/await (> 7.6)
 БД: локальная  
 Коллекция: 1млн записей  
 Индекс: отсутствует.
-```json
+```
 "executionStats" : {
 		"executionSuccess" : true,
 		"nReturned" : 1,
@@ -82,7 +82,7 @@ Node.js с поддержкой async/await (> 7.6)
 ```
 
 Индекс: shortLink_1.
-```json
+```
 "executionStats" : {
 		"executionSuccess" : true,
 		"nReturned" : 1,
