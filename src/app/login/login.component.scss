@@ -1,0 +1,102 @@
+body {
+  margin: 0;
+}
+
+.wrap{
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 20px;
+}
+
+.header{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+.header a{
+  display: block;
+  color: #fff;
+  background: gray;
+  padding: 5px 10px;
+  text-decoration: none;
+  margin: 0 5px 120px 5px;
+  cursor: pointer;
+}
+
+.header a:hover{
+  text-decoration: underline;
+}
+
+.container{
+  min-width: 500px;
+  width: 80%;
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: column;
+  background: #BFBFBF;
+  margin-bottom: 50px;
+}
+
+.row{
+  display: flex;
+  flex-direction: column;
+  //justify-content: space-between;
+  padding: 0 15px;
+}
+
+.nowrap{
+  flex-wrap: wrap;
+}
+
+.mb{
+  margin-bottom: 15px;
+}
+
+h3{
+  width: 100%;
+  text-align: center;
+  color: #fff;
+}
+
+h3 a{
+  color: #fff;
+  background: gray;
+  padding: 5px 10px;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+h3 a:hover{
+  text-decoration: underline;
+}
+
+.input-value{
+  display: block;
+  height: 40px;
+  width: auto;
+  line-height: 30px;
+  font-size: 15px;
+  padding: 0 10px;
+  margin-top: 10px;
+}
+
+.submit-button-login{
+  width: 100px;
+  line-height: 30px;
+  border: none;
+  background: gray;
+  color: white;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 15px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.arrow{
+  line-height: 40px;
+  padding: 0 10px;
+  color: white;
+}

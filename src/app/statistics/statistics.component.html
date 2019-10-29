@@ -1,0 +1,17 @@
+<div class="wrap" *ngIf="auth.isAuthenticated()">
+  <div class="header">
+    <a (click)="auth.logout(); this.statisticsArr=[]; router.navigate(['/'])">Logout</a>
+    <a routerLink="/">Home</a>
+  </div>
+  <div class="container">
+    <div class="row nowrap">
+      <h3>{{auth.userData.userName}}'s tracked links:</h3>
+    </div>
+    <div class="row mb" *ngFor="let statistic of statisticsArr">
+      <input type="text" class="input-value" value="{{statistic.link}}" readonly>
+      <span class="arrow">></span>
+      <input type="text" class="input-value" value="{{originUrl + '/' + statistic.shortLink}}" readonly>
+      <input type="text" class="clickCount" readonly value="{{statistic.clickCounter}} Clicks ">
+    </div>
+  </div>
+</div>

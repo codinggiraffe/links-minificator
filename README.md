@@ -1,27 +1,97 @@
-# LinksMinificator
+# Задача 2. Сокращатель ссылок
+---
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.4.
+### Описание проекта
+Для реализации был выбран стек MEAN (MongoDB, Express.js, Angular, Node.js)
+api запускается параллельно с интерфейсом, обмен данными происходит путем POST запросов.
 
-## Development server
+### Системные требования:
+Node.js с поддержкой async/await (> 7.6)  
+установленная в системе MongoDB
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+### Загрузка общих зависимостей:
+> npm install
+### Запуск api (3000 порт)
+> запустить mongoDB  
+> npm run start:server
+### Запуск интерфейса (4200 порт)
+> ng serve -o
 
-## Code scaffolding
+### Реализованные функции
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+* регистрация пользователя
+* создание неотслеживаемой сокращенной ссылки (для анонимного пользователя)
+* создание отслеживаемой сокращенной ссылки (для вошедшего пользователя)
+* отображение ссылок, сокращенных вошедшим пользователем, со статистикой переходов
+* переход с короткой ссылки на длинную
 
-## Build
+### Страницы интерфейса
+/ - форма ввода ссылки с указанием протокола. 
+/login - страница входа в
+/signup - страница регистрация нового пользователя
+/statistics - страница отслеживаемых ссылок 
+/:shortLink - редирект на соответствующую страницу
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+### Схема БД
+Хранение ссылки:
+```json
+{
+  link: {type: String, required: true}, // исходная ссылка
+  shortLink: {type: String, required: true}, // короткая ссылка
+  anonymous: {type: Boolean, required: true}, // true для неавторизованного пользователя
+  authorId: {type: mongoose.Schema.Types.ObjectId, ref: "User", required: false}, // id пользователя, создавшего неанонимную ссылку
+  clickCounter: {type: Number, required: true, default: 0} // счетчик переходов неанонимной ссылки
+}
+```
 
-## Running unit tests
+### Алгоритм работы
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+Создание короткой ссылки для <longLink>:  
+Если (пользователь вошел под <userId>)  
+----То поиск {link: <longLink>, anonymous: false, authorId: <userId>}  
+--------Если <longLink> найдена, возвращение соответствующей shortLink  
+--------Иначе добавление в БД  
+Иначе  
+----Поиск анонимной записи {link: <longLink>, anonymous: true}  
+--------Если <longLink> найдена, возвращение соответствующей shortLink  
+--------Иначе добавление в БД  
 
-## Running end-to-end tests
+### Оптимизация
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Для оптимизации основного сценария использования (открытия короткой ссылки) -
+необходимо оптимизировать скорость поиска ссылки с заданной shortLink.
+Для этого, для коллекции links был построен индекс:
+({"shortLink":1},{"unique",1}) - возрастающий и уникальный
 
-## Further help
+При тестировании запущенного api при помощи wrk, отправлялся запрос с фиксированным shortLink. Api работало с такой же скоростью как и без индексов, причина была определена не сразу и судя по всему в том, что при поиске определенной записи в коллекции, mongoDB сохраняет результат на следующие n запросов.
+Поэтому проверка времени поиска определенной записи в коллекции, измерена средствами mongoDB.
+При помощи запроса вида: db.links.find({shortLink:'zipERL'}).explain("executionStats")
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+Результат:  
+БД: локальная  
+Коллекция: 1млн записей  
+Индекс: отсутствует.
+```json
+"executionStats" : {
+		"executionSuccess" : true,
+		"nReturned" : 1,
+		"executionTimeMillis" : 637, // <--
+		"totalKeysExamined" : 0,
+		...
+}
+```
+
+Индекс: shortLink_1.
+```json
+"executionStats" : {
+		"executionSuccess" : true,
+		"nReturned" : 1,
+		"executionTimeMillis" : 10, // <--
+		"totalKeysExamined" : 1,
+		"totalDocsExamined" : 1,
+		….
+}
+```
+
+
+

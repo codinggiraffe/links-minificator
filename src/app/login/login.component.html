@@ -1,0 +1,18 @@
+<div class="wrap">
+  <div class="header">
+    <a *ngIf="auth.isAuthenticated()" routerLink="/statistics">{{auth.userData.userName}}'s dashboard </a>
+    <a *ngIf="auth.isAuthenticated()" (click)="auth.logout()">Logout</a>
+    <a *ngIf="!auth.isAuthenticated()" routerLink="/signup">Sign Up</a>
+    <a routerLink="/">Home</a>
+  </div>
+  <div class="container">
+    <div class="row mb nowrap">
+        <input  class="input-value" type="text" name="inputLogin" [(ngModel)]="inputLogin" placeholder="Input your username">
+        <input class="input-value" type="password" name="inputPass" [(ngModel)]="inputPass" placeholder="Input your password">
+        <button class="submit-button-login"  (click)="login()"> Login!</button>
+        <!--      <p>token: {{auth.getToken()}}</p>-->
+        <!--      <a routerLink="/statistics">stat</a>-->
+        <!--      <button (click)="auth.logout()">logout</button>-->
+    </div>
+  </div>
+</div>

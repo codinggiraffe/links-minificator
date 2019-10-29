@@ -1,0 +1,22 @@
+<div class="wrap">
+  <div class="header">
+    <a *ngIf="auth.isAuthenticated()" routerLink="/statistics">{{auth.userData.userName}}'s dashboard </a>
+    <a *ngIf="auth.isAuthenticated()" (click)="auth.logout(); this.resultArr=[]">Logout</a>
+    <a *ngIf="!auth.isAuthenticated()" routerLink="/signup">Sign Up</a>
+  </div>
+  <div class="container">
+    <div class="row nowrap">
+      <h3>Links Minificator. <span *ngIf="!auth.isAuthenticated()">To create tracked link - <a routerLink="/login">login</a></span></h3>
+<!--      <h4>To create tracked link - login</h4>-->
+    </div>
+    <div class="row mb">
+      <input type="text" class="input-value" [(ngModel)]="longLink" placeholder="protocol://correctURL">
+      <button class="submit-button" (click)="shortLink()">Shorten</button>
+    </div>
+    <div class="row mb" *ngFor="let result of resultArr">
+      <input type="text" class="input-value" value="{{result.from}}" readonly>
+      <span class="arrow">></span>
+      <input type="text" class="input-value" value="{{result.to}}" readonly>
+    </div>
+  </div>
+</div>
